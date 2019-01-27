@@ -1,28 +1,49 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Nav from './components/Nav'
+import { Route, withRouter} from 'react-router-dom'
+import API from './API'
+import Login from './components/Login'
+import Home from './components/Home'
 
 class App extends Component {
+
+  state={
+    currentUser: '',
+    outfitList: [],
+    brandList: [],
+    colorList: [],
+    categoryList: []
+  }
+
+  componentDidMount = () => {
+    const token = localStorage.getItem('token')
+      if (token) {
+        API.validate(token)
+      } else {
+        this.props.history.push('/login')
+      }
+  }
+
+  setItemData = () => {
+
+  }
+  
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+         <header>
+           Logo
+         </header>
+        <Route exact path='/' component={ () => <Home /> } />
+        <Route path='/login' component={ () => <Login /> } />
+       
+       
+        <Nav />
+        
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default withRouter(App);
