@@ -9,10 +9,12 @@ class App extends Component {
 
   state={
     currentUser: '',
+    currentId: '',
     outfitList: [],
     brandList: [],
     colorList: [],
-    categoryList: []
+    categoryList: [],
+    items: []
   }
 
   componentDidMount = () => {
@@ -24,10 +26,55 @@ class App extends Component {
       }
   }
 
-  setItemData = () => {
+  setItemData = (data) => {
+    if (data) {
+     this.setState({
+      currentUser: data.user.username,
+      currentId: data.user.id,
+      outfitList: data.user.oufits,
+      items: data.user.items
+      })
+      this.setBrandData()
+      this.setCategoryData()
+     console.log(data.user.username)     
+    } else {
+      console.log('no data received')
+    }
+  }
 
+  setBrandData = () => {
+    if (this.state.items.length > 0) {
+      const brands = this.state.items.map(item => item.brand)
+      const uniqueBrandList = brands.reduce((uniqueArray, brand) => {
+        if (uniqueArray.map(brand => brand).includes(brand)) return uniqueArray
+        uniqueArray.push(brand)
+        return uniqueArray
+      }, [])
+      this.setState({brandList: uniqueBrandList})
+      } else {
+        console.log('no brand data found')
+      }
+  }
+
+  setCategoryData = () => {
+    if (this.state.items.length > 0) {
+      const categories = this.state.items.map(item => item.category.name)
+      const uniqueCategoryList = categories.reduce((uniqueArray, category) => {
+        if (uniqueArray.map(category => category).includes(category)) return uniqueArray
+        uniqueArray.push(category)
+        return uniqueArray
+      }, [])
+      this.setState({categoryList: uniqueCategoryList})
+    } else {
+      console.log('no categories found')
+    }
   }
   
+  setColorData = () => {
+    if (this.state.items.length > 0)
+  } 
+  
+
 
   render() {
     return (
@@ -36,7 +83,7 @@ class App extends Component {
            Logo
          </header>
         <Route exact path='/' component={ () => <Home /> } />
-        <Route path='/login' component={ () => <Login /> } />
+        <Route path='/login' component={ () => <Login setData={this.setItemData} /> } />
        
        
         <Nav />

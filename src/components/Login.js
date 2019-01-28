@@ -20,6 +20,7 @@ class Login extends React.Component {
                 console.log(data)
             } else {
                 localStorage.setItem('token', data.jwt)
+                this.props.setData(data)
                 console.log(data)
             }
         })
