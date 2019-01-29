@@ -36,7 +36,8 @@ class App extends Component {
       })
       this.setBrandData()
       this.setCategoryData()
-     console.log(data.user.username)     
+      this.setColorData()
+      this.setOutfitData(data)
     } else {
       console.log('no data received')
     }
@@ -71,11 +72,28 @@ class App extends Component {
   }
   
   setColorData = () => {
-    if (this.state.items.length > 0)
-  } 
+    if (this.state.items.length > 0) {
+      const colors = this.state.items.map(item => item.color)
+      const uniqueColorList = colors.reduce((uniqueArray, color) => {
+        if (uniqueArray.map(color => color).includes(color)) return uniqueArray
+        uniqueArray.push(color)
+        return uniqueArray
+      }, [])
+      this.setState({colorList: uniqueColorList})
+    } else {
+      console.log('no colors found')
+    }
+  }
   
-
-
+  setOutfitData = (data) => {
+    if (data.user.outfits.length > 0) {
+      this.setState({outfitList: data.user.outfits})
+      console.log(data.user.outfits)
+    } else {
+      console.logs('no outfits found')
+    }
+  }
+  
   render() {
     return (
       <div>
